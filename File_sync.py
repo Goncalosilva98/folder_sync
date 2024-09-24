@@ -5,8 +5,6 @@ import time
 import argparse
 import logging
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from os.path import dirname, abspath
-
 
 def calculate_hash(filepath):
     sha256 = hashlib.sha256()
@@ -36,7 +34,8 @@ def sync_files(source_dir, replica_dir):
 
     with ThreadPoolExecutor() as executor:
         futures = []
-        
+        is_change = False
+
         for root, dirs, files in os.walk(source_dir):
             relative_path = os.path.relpath(root, source_dir)
             replica_path = os.path.join(replica_dir, relative_path)
@@ -55,12 +54,14 @@ def sync_files(source_dir, replica_dir):
 
                     if source_hash != destination_hash:
                         futures.append(executor.submit(update_file, source_file, replica_file))
-                    else:
-                        log_operation(f"File is unchanged: {file}")
+                        is_change = True
+
                 else:
                     futures.append(executor.submit(copy_file, source_file, replica_file))
 
-                    
+        if is_change == False:
+            log_operation('There are no changes')
+
         for future in as_completed(futures):
             future.result()
 
@@ -126,7 +127,6 @@ def main():
     logging.basicConfig(filename = logfile, level=logging.INFO,format = '%(message)s')
 
     periodic_sync(args.source_dir, args.replica_dir, args.interval)
-
 
 
 
