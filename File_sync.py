@@ -122,7 +122,7 @@ def main():
 
     currentTime = time.strftime('%Y_%m_%d_%H_%M_%S')
     filename = currentTime + ".txt"
-    logfile = os.getcwd() + "/Logs/" + filename
+    logfile = os.getcwd() + "/logs/" + filename
 
     logging.basicConfig(filename = logfile, level=logging.INFO,format = '%(message)s')
 
