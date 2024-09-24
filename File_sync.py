@@ -5,6 +5,7 @@ import time
 import argparse
 import logging
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from os.path import dirname, abspath
 
 
 def calculate_hash(filepath):
@@ -112,19 +113,20 @@ def periodic_sync(source_dir, replica_dir, interval_seconds):
 
 
 def main():
-    
-    parser = argparse.ArgumentParser(description="Synchronize two folders.")
+    parser = argparse.ArgumentParser(description="One way folder Sync")
     parser.add_argument("source_dir")
     parser.add_argument("replica_dir")
     parser.add_argument("interval", type=int)
-    parser.add_argument("log_file")
     args = parser.parse_args()
 
-    
-    logging.basicConfig(filename=args.log_file, level=logging.INFO,
-                        format = '%(message)s')
+    currentTime = time.strftime('%Y_%m_%d_%H_%M_%S')
+    filename = currentTime + ".txt"
+    logfile = os.getcwd() + "/Logs/" + filename
+
+    logging.basicConfig(filename = logfile, level=logging.INFO,format = '%(message)s')
 
     periodic_sync(args.source_dir, args.replica_dir, args.interval)
+
 
 
 
