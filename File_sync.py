@@ -42,6 +42,7 @@ def sync_files(source_dir, replica_dir):
 
             if not os.path.exists(replica_path):
                 os.makedirs(replica_path)
+                is_change = True
 
             for file in files:
                 source_file = os.path.join(root, file)
@@ -58,6 +59,7 @@ def sync_files(source_dir, replica_dir):
 
                 else:
                     futures.append(executor.submit(copy_file, source_file, replica_file))
+                    is_change = True
 
         if is_change == False:
             log_operation('There are no changes')
