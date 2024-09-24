@@ -122,7 +122,7 @@ def main():
     parser.add_argument("interval", type=int)
     args = parser.parse_args()
 
-    currentTime = time.strftime('%Y_%m_%d_%H_%M_%S')
+    currentTime = time.strftime('%Y_%m_%d-(%H.%M.%S)')
     filename = currentTime + ".txt"
     logfile = os.getcwd() + "/logs/" + filename
 
